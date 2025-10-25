@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monster House: B1 Mega Challenge</title>
+    <!-- Carga de Tailwind CSS para un diseño moderno y responsive -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Configuración de fuente y estilos base */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117; /* Fondo oscuro */
+        }
+        .quiz-container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #161b22; /* Contenedor oscuro */
+            border-radius: 1rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+        .question-card {
+            background-color: #21262d; /* Tarjeta de pregunta */
+            border-left: 5px solid #007acc; /* Borde de color de acento */
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .question-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 122, 204, 0.4);
+        }
+        .option-label {
+            transition: background-color 0.15s, border-color 0.15s;
+            cursor: pointer;
+            border: 2px solid #30363d;
+        }
+        .option-label:hover {
+            background-color: #2f343a;
+        }
+        input[type="radio"]:checked + .option-label {
+            background-color: #007acc; /* Azul de selección */
+            border-color: #005a99;
+            color: white;
+            font-weight: 600;
+        }
+        .check-button {
+            background-color: #238636; /* Verde de GitHub */
+            transition: background-color 0.2s;
+        }
+        .check-button:hover {
+            background-color: #2ea043;
+        }
+        .reset-button {
+            background-color: #f85149; /* Rojo para resetear */
+            transition: background-color 0.2s;
+        }
+        .reset-button:hover {
+            background-color: #fa5e56;
+        }
+        /* Estilos para el modal de resultados */
+        .modal {
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+        }
+        .modal-content {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+        }
+        .modal-header {
+            border-bottom: 1px solid #30363d;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app" class="quiz-container text-gray-200">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-[#007acc] mb-2">Monster House: B1 Mega Challenge</h1>
+            <p class="text-lg text-gray-400">Test your English Level B1 skills using context from the movie!</p>
+        </header>
+
+        <form id="quizForm" onsubmit="event.preventDefault(); checkAnswers();">
+            <!-- Question 1: Conditional Clauses (Type 1) -->
+            <div class="question-card p-6 rounded-lg mb-8" data-question="1">
+                <p class="text-xl font-semibold mb-4 text-blue-300">1. Conditional Clauses (Type 1):</p>
+                <p class="mb-4">If DJ <span class="font-bold">(not call)</span> the police now, the house <span class="font-bold">(attack)</span> his parents when they arrive.</p>
+                
+                <div class="space-y-3">
+                    <label class="block">
+                        <input type="radio" name="q1" value="a" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">A. doesn't call / will attack</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="q1" value="b" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">B. won't call / will attack</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="q1" value="c" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">C. doesn't call / attacks</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 2: Simple Past vs. Past Continuous -->
+            <div class="question-card p-6 rounded-lg mb-8" data-question="2">
+                <p class="text-xl font-semibold mb-4 text-blue-300">2. Simple Past vs. Past Continuous:</p>
+                <p class="mb-4">Jenny <span class="font-bold">(try)</span> to sell cookies when the kite <span class="font-bold">(land)</span> on Mr. Nebbercracker's lawn.</p>
+                
+                <div class="space-y-3">
+                    <label class="block">
+                        <input type="radio" name="q2" value="a" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">A. was trying / landed</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="q2" value="b" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">B. tried / was landing</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="q2" value="c" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">C. was trying / was landing</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 3: Future Tenses (Will vs Going to) -->
+            <div class="question-card p-6 rounded-lg mb-8" data-question="3">
+                <p class="text-xl font-semibold mb-4 text-blue-300">3. Future Tenses (Will vs Going to):</p>
+                <p class="mb-4">"Look! The house is starting to move! It <span class="font-bold">(definitely / eat)</span> us!"</p>
+                
+                <div class="space-y-3">
+                    <label class="block">
+                        <input type="radio" name="q3" value="a" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">A. will definitely eat</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="q3" value="b" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">B. is definitely going to eat</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="q3" value="c" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">C. definitely eats</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 4: Comparative/Superlative Adjectives -->
+            <div class="question-card p-6 rounded-lg mb-8" data-question="4">
+                <p class="text-xl font-semibold mb-4 text-blue-300">4. Comparative/Superlative Adjectives:</p>
+                <p class="mb-4">Chowder says he is <span class="font-bold">(bad)</span> at videogames than DJ, but DJ thinks he is <span class="font-bold">(good)</span> player in the world.</p>
+                
+                <div class="space-y-3">
+                    <label class="block">
+                        <input type="radio" name="q4" value="a" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">A. worse / the best</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="q4" value="b" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">B. worser / better</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="q4" value="c" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">C. more bad / the goodest</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 5: Modals of Obligation/Necessity -->
+            <div class="question-card p-6 rounded-lg mb-8" data-question="5">
+                <p class="text-xl font-semibold mb-4 text-blue-300">5. Modals of Obligation/Necessity:</p>
+                <p class="mb-4">DJ: "We <span class="font-bold">(must/have to)</span> destroy the house before the police arrive. We <span class="font-bold">(must not/shouldn't)</span> wait any longer!"</p>
+                
+                <div class="space-y-3">
+                    <label class="block">
+                        <input type="radio" name="q5" value="a" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">A. have to / mustn't</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="q5" value="b" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">B. must / haven't to</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="q5" value="c" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">C. should / don't have to</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 6: Vocabulary (The Supernatural) -->
+            <div class="question-card p-6 rounded-lg mb-8" data-question="6">
+                <p class="text-xl font-semibold mb-4 text-blue-300">6. Vocabulary (The Supernatural):</p>
+                <p class="mb-4">The house is possessed by the <span class="font-bold">(esposa muerta de Nebbercracker)</span>, making it a terrifying, living creature.</p>
+                
+                <div class="space-y-3">
+                    <label class="block">
+                        <input type="radio" name="q6" value="a" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">A. deceased monster</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="q6" value="b" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">B. evil spirit</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="q6" value="c" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">C. Nebbercracker's late wife</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 7: Present Perfect (Experience) -->
+            <div class="question-card p-6 rounded-lg mb-8" data-question="7">
+                <p class="text-xl font-semibold mb-4 text-blue-300">7. Present Perfect (Experience):</p>
+                <p class="mb-4">Have you ever <span class="font-bold">(see)</span> a house that tried to eat people? No, I <span class="font-bold">(never / see)</span> anything like it!</p>
+                
+                <div class="space-y-3">
+                    <label class="block">
+                        <input type="radio" name="q7" value="a" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">A. saw / have never saw</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="q7" value="b" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">B. seen / have never seen</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="q7" value="c" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">C. saw / never saw</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 8: Passive Voice (Present) -->
+            <div class="question-card p-6 rounded-lg mb-8" data-question="8">
+                <p class="text-xl font-semibold mb-4 text-blue-300">8. Passive Voice (Present):</p>
+                <p class="mb-4">The mysterious occurrences at the house <span class="font-bold">(are / discuss)</span> by all the children in the neighborhood.</p>
+                
+                <div class="space-y-3">
+                    <label class="block">
+                        <input type="radio" name="q8" value="a" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">A. are discussed</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="q8" value="b" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">B. is discussed</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="q8" value="c" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">C. discuss</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 9: Verb Patterns (Verb + -ing or to + Inf) -->
+            <div class="question-card p-6 rounded-lg mb-8" data-question="9">
+                <p class="text-xl font-semibold mb-4 text-blue-300">9. Verb Patterns (Verb + -ing or to + Inf):</p>
+                <p class="mb-4">The children hate <span class="font-bold">(walk)</span> past the house, but they need <span class="font-bold">(get)</span> their ball back.</p>
+                
+                <div class="space-y-3">
+                    <label class="block">
+                        <input type="radio" name="q9" value="a" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">A. to walk / getting</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="q9" value="b" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">B. walking / to get</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="q9" value="c" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">C. to walk / to get</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 10: Phrasal Verbs (Common B1) -->
+            <div class="question-card p-6 rounded-lg mb-8" data-question="10">
+                <p class="text-xl font-semibold mb-4 text-blue-300">10. Phrasal Verbs (Common B1):</p>
+                <p class="mb-4">The house finally <span class="font-bold">(explode)</span> and the children managed to <span class="font-bold">(escape)</span> just in time.</p>
+                
+                <div class="space-y-3">
+                    <label class="block">
+                        <input type="radio" name="q10" value="a" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">A. blew up / get away</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="q10" value="b" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">B. turned off / look after</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="q10" value="c" class="hidden">
+                        <span class="option-label block p-3 rounded-md text-sm">C. brought up / put down</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mt-6">
+                <button type="submit" class="check-button text-white font-bold py-3 px-6 rounded-lg shadow-lg">
+                    Check Answers
+                </button>
+                <button type="button" onclick="resetQuiz()" class="reset-button text-white font-bold py-3 px-6 rounded-lg shadow-lg">
+                    Reset Quiz
+                </button>
+            </div>
+        </form>
+
+        <!-- Modal de Resultados (inicialmente oculto) -->
+        <div id="resultsModal" class="modal fixed inset-0 flex items-center justify-center p-4 hidden">
+            <div class="modal-content w-full max-w-lg p-6 rounded-xl text-gray-200">
+                <div class="modal-header flex justify-between items-center pb-4 mb-4">
+                    <h2 class="text-2xl font-bold text-white">Quiz Results</h2>
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-white text-3xl font-light leading-none">&times;</button>
+                </div>
+                <div id="scoreDisplay" class="text-center mb-6">
+                    <!-- Score will be displayed here -->
+                </div>
+                <div id="feedbackDisplay" class="space-y-2 mb-6">
+                    <!-- Feedback on wrong answers will be displayed here -->
+                </div>
+                <div class="text-center">
+                    <button onclick="closeModal()" class="check-button text-white font-bold py-2 px-5 rounded-lg">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Respuestas correctas (a: A, b: B, c: C)
+        const correctAnswers = {
+            q1: 'a', // If DJ doesn't call / will attack (Conditional Type 1)
+            q2: 'a', // was trying / landed (Past Continuous for ongoing action, Simple Past for interruption)
+            q3: 'b', // is definitely going to eat (Prediction based on visual evidence)
+            q4: 'a', // worse / the best (Irregular comparative and superlative forms)
+            q5: 'a', // have to / mustn't (Strong obligation and prohibition)
+            q6: 'c', // Nebbercracker's late wife (B1 Vocabulary: family/death)
+            q7: 'b', // seen / have never seen (Present Perfect for life experience, past participle form)
+            q8: 'a', // are discussed (Passive Voice: Plural subject 'occurrences')
+            q9: 'b', // walking / to get (Hate + -ing, Need + to + Inf)
+            q10: 'a' // blew up / get away (Phrasal verbs: explode, escape)
+        };
+
+        const questionTitles = {
+            q1: '1. Conditional Clauses (Type 1)',
+            q2: '2. Simple Past vs. Past Continuous',
+            q3: '3. Future Tenses (Will vs Going to)',
+            q4: '4. Comparative/Superlative Adjectives',
+            q5: '5. Modals of Obligation/Necessity',
+            q6: '6. Vocabulary (The Supernatural)',
+            q7: '7. Present Perfect (Experience)',
+            q8: '8. Passive Voice (Present)',
+            q9: '9. Verb Patterns (Verb + -ing or to + Inf)',
+            q10: '10. Phrasal Verbs (Common B1)'
+        };
+
+        function checkAnswers() {
+            const form = document.getElementById('quizForm');
+            let score = 0;
+            const wrongQuestions = [];
+
+            // Reset visual feedback
+            document.querySelectorAll('.option-label').forEach(label => {
+                label.classList.remove('bg-green-700', 'bg-red-700', 'border-green-800', 'border-red-800', 'text-white');
+                label.classList.add('bg-21262d', 'border-30363d', 'text-gray-200');
+            });
+            document.querySelectorAll('.question-card').forEach(card => {
+                card.classList.remove('border-green-500', 'border-red-500');
+                card.classList.add('border-007acc');
+            });
+
+
+            for (let i = 1; i <= 10; i++) {
+                const qName = `q${i}`;
+                const selectedOption = form.elements[qName].value;
+                const correct = correctAnswers[qName];
+                const questionCard = document.querySelector(`[data-question="${i}"]`);
+
+                let isCorrect = false;
+
+                if (selectedOption) {
+                    // Highlight selected label
+                    const selectedLabel = document.querySelector(`input[name="${qName}"][value="${selectedOption}"] + .option-label`);
+
+                    if (selectedOption === correct) {
+                        score++;
+                        isCorrect = true;
+                    } else {
+                        // Mark wrong answer
+                        selectedLabel.classList.remove('bg-007acc', 'border-005a99');
+                        selectedLabel.classList.add('bg-red-700', 'border-red-800');
+                        questionCard.classList.remove('border-007acc');
+                        questionCard.classList.add('border-red-500');
+                        wrongQuestions.push({
+                            number: i,
+                            title: questionTitles[qName],
+                            correct: document.querySelector(`input[name="${qName}"][value="${correctAnswers[qName]}"] + .option-label`).textContent.trim()
+                        });
+                    }
+
+                    // Always highlight the correct answer
+                    const correctLabel = document.querySelector(`input[name="${qName}"][value="${correct}"] + .option-label`);
+                    correctLabel.classList.remove('bg-007acc', 'border-005a99', 'bg-red-700', 'border-red-800');
+                    correctLabel.classList.add('bg-green-700', 'border-green-800', 'text-white');
+                } else {
+                    // If no answer selected, it's wrong (or just not answered)
+                    wrongQuestions.push({
+                        number: i,
+                        title: questionTitles[qName],
+                        correct: document.querySelector(`input[name="${qName}"][value="${correctAnswers[qName]}"] + .option-label`).textContent.trim(),
+                        unanswered: true
+                    });
+                    questionCard.classList.remove('border-007acc');
+                    questionCard.classList.add('border-red-500');
+                }
+            }
+
+            // Display results in the modal
+            showResultsModal(score, wrongQuestions);
+        }
+
+        function showResultsModal(score, wrongQuestions) {
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const feedbackDisplay = document.getElementById('feedbackDisplay');
+            const totalQuestions = 10;
+            const percentage = (score / totalQuestions) * 100;
+
+            let scoreText;
+            let feedbackText = '';
+
+            // Score Styling and Message
+            if (percentage === 100) {
+                scoreText = `<p class="text-5xl font-extrabold text-green-400">10/10!</p><p class="text-xl mt-2 text-white">¡Excellent! You have achieved mastery of Level B1!</p>`;
+            } else if (percentage >= 70) {
+                scoreText = `<p class="text-5xl font-extrabold text-yellow-400">${score}/${totalQuestions}</p><p class="text-xl mt-2 text-white">Good Job! You are on the right track for B1.</p>`;
+            } else {
+                scoreText = `<p class="text-5xl font-extrabold text-red-500">${score}/${totalQuestions}</p><p class="text-xl mt-2 text-white">Keep Practicing! Review the grammar topics.</p>`;
+            }
+            
+            scoreDisplay.innerHTML = scoreText;
+
+            // Detailed Feedback
+            if (wrongQuestions.length > 0) {
+                feedbackText = '<h3 class="text-lg font-semibold text-red-300 border-b border-red-500 pb-1 mb-3">Review Topics:</h3>';
+                wrongQuestions.forEach(q => {
+                    if (q.unanswered) {
+                        feedbackText += `<p class="text-sm text-gray-400"><strong>${q.title}:</strong> Unanswered. The correct answer was: <span class="text-white font-medium">${q.correct}</span></p>`;
+                    } else {
+                        feedbackText += `<p class="text-sm text-gray-400"><strong>${q.title}:</strong> Incorrect. The correct answer was: <span class="text-white font-medium">${q.correct}</span></p>`;
+                    }
+                });
+            } else {
+                feedbackText = '<p class="text-lg text-green-400 mt-4">All answers are correct! Congratulations on your B1 level!</p>';
+            }
+
+            feedbackDisplay.innerHTML = feedbackText;
+
+            // Show modal
+            document.getElementById('resultsModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('resultsModal').classList.add('hidden');
+        }
+
+        function resetQuiz() {
+            document.getElementById('quizForm').reset();
+            
+            // Reset visual feedback
+            document.querySelectorAll('.option-label').forEach(label => {
+                label.classList.remove('bg-green-700', 'bg-red-700', 'border-green-800', 'border-red-800', 'text-white');
+                label.classList.add('bg-21262d', 'border-30363d', 'text-gray-200');
+            });
+            document.querySelectorAll('.question-card').forEach(card => {
+                card.classList.remove('border-green-500', 'border-red-500');
+                card.classList.add('border-007acc');
+            });
+            
+            closeModal();
+        }
+    </script>
+
+</body>
+</html>
+
